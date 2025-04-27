@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sanford Pages Place - Lobby</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+    }
+    header {
+      background: #0056b3;
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+    input {
+      margin: 10px;
+      padding: 10px;
+      width: 250px;
+      font-size: 16px;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #0056b3;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #003d80;
+    }
+    footer {
+      position: absolute;
+      bottom: 10px;
+      font-size: 12px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  SANFORD PAGES PLACE
+</header>
+
+<main>
+  <input id="roomInput" placeholder="Room Name">
+  <input id="passwordInput" placeholder="Password">
+  <div>
+    <button onclick="createRoom()">Create Room</button>
+    <button onclick="joinRoom()">Join Room</button>
+  </div>
+</main>
+
+<footer>
+  Built with love by NFN Research
+</footer>
+
+<script>
+function createRoom() {
+  const room = document.getElementById('roomInput').value;
+  const password = document.getElementById('passwordInput').value;
+  if (!room || !password) {
+    alert('Enter both room name and password to create.');
+    return;
+  }
+  // Save password locally so we can pass it when joining
+  localStorage.setItem(room, password);
+  window.location.href = `room.html?room=${room}`;
+}
+
+function joinRoom() {
+  const room = document.getElementById('roomInput').value;
+  const password = document.getElementById('passwordInput').value;
+  if (!room || !password) {
+    alert('Enter both room name and password to join.');
+    return;
+  }
+  localStorage.setItem(room, password);
+  window.location.href = `room.html?room=${room}`;
+}
+</script>
+
+</body>
+</html>name: NodeJS with Grunt
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build
+      run: |
+        npm install
+        grunt
